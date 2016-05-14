@@ -58,11 +58,10 @@ func main() {
 	router.GET("/query1", func(c *gin.Context) {
 		table := "<table class='table'><thead><tr>"
 		// put your query here
-		rows, err := db.Query("SELECT CAST(AVG(cost) AS NUMERIC(5,2)) AS Avg_Cost, genre
-								FROM album
-								GROUP BY genre
-								ORDER BY Avg_Cost DESC;
-								") // <--- EDIT THIS LINE
+		rows, err := db.Query("SELECT CAST(AVG(cost) AS NUMERIC(5,2)) AS Avg_Cost, genre" +
+								"FROM album" +
+								"GROUP BY genre" +
+								"ORDER BY Avg_Cost DESC;") // <--- EDIT THIS LINE
 		if err != nil {
 			// careful about returning errors to the user!
 			c.AbortWithError(http.StatusInternalServerError, err)
@@ -78,7 +77,7 @@ func main() {
 		// once you've added all the columns in, close the header
 		table += "</thead><tbody>"
 		// declare all your RETURNED columns here
-		var avg double      // <--- EDIT THESE LINES
+		var avg int      // <--- EDIT THESE LINES
 		var genre string //<--- ^^^^
 		for rows.Next() {
 			// assign each of them, in order, to the parameters of rows.Scan.
