@@ -32,7 +32,7 @@ func main() {
 	var errd error
 	// here we want to open a connection to the database using an environemnt variable.
 	// This isn't the best technique, but it is the simplest one for heroku
-	db, errd = sql.Open("postgres", os.Getenv("postgres://ynerddqrushrdl:bIA_gQYkA5Lh-cM_Nv1bLdXrWU@ec2-54-197-230-161.compute-1.amazonaws.com:5432/dekv2rkkmd36hj"))
+	db, errd = sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if errd != nil {
 		log.Fatalf("Error opening database: %q", errd)
 	}
@@ -44,6 +44,7 @@ func main() {
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
+
 
 	router.GET("/ping", func(c *gin.Context) {
 		ping := db.Ping()
@@ -59,9 +60,9 @@ func main() {
 		table := "<table class='table'><thead><tr>"
 		// put your query here
 		rows, err := db.Query("SELECT CAST(AVG(cost) AS NUMERIC(5,2)) AS Avg_Cost, genre" +
-								"FROM album" +
-								"GROUP BY genre" +
-								"ORDER BY Avg_Cost DESC;") // <--- EDIT THIS LINE
+								" FROM album" +
+								" GROUP BY genre" +
+								" ORDER BY Avg_Cost DESC;") // <--- EDIT THIS LINE
 		if err != nil {
 			// careful about returning errors to the user!
 			c.AbortWithError(http.StatusInternalServerError, err)
@@ -94,7 +95,10 @@ func main() {
 	router.GET("/query2", func(c *gin.Context) {
 		table := "<table class='table'><thead><tr>"
 		// put your query here
-		rows, err := db.Query("SELECT * FROM table1") // <--- EDIT THIS LINE
+		rows, err := db.Query("SELECT album.title, album.cost, COUNT(song)" +
+								" FROM album JOIN song ON (album.albumId = song.albumId)" +
+								" GROUP BY album.title, album.cost" +
+								" HAVING (cost / COUNT(song)) < 0.5;") // <--- EDIT THIS LINE
 		if err != nil {
 			// careful about returning errors to the user!
 			c.AbortWithError(http.StatusInternalServerError, err)
@@ -110,9 +114,12 @@ func main() {
 		// once you've added all the columns in, close the header
 		table += "</thead><tbody>"
 		// columns
+		var album_title string
+		var album_cost float64
+		var track_count int
 		for rows.Next() {
 			// rows.Scan() // put columns here prefaced with &
-			table += "<tr><td></td></tr>" // <--- EDIT THIS LINE
+			table += "<tr><td>" + album_title + "</td><td>" + strconv.FormatFloat(album_cost, 'E', 2, 64) +"</td><td>" + strconv.Itoa(track_count) + "</td></tr>" // <--- EDIT THIS LINE
 		}
 		// finally, close out the body and table
 		table += "</tbody></table>"
@@ -122,7 +129,9 @@ func main() {
 	router.GET("/query3", func(c *gin.Context) {
 		table := "<table class='table'><thead><tr>"
 		// put your query here
-		rows, err := db.Query("SELECT * FROM table1") // <--- EDIT THIS LINE
+		rows, err := db.Query("SELECT age FROM artist")//"SELECT title" +
+								//" FROM album" +
+								//" WHERE cost > (SELECT avg(age) FROM artist);") // <--- EDIT THIS LINE
 		if err != nil {
 			// careful about returning errors to the user!
 			c.AbortWithError(http.StatusInternalServerError, err)
@@ -138,9 +147,10 @@ func main() {
 		// once you've added all the columns in, close the header
 		table += "</thead><tbody>"
 		// columns
+		var album_title string
 		for rows.Next() {
 			// rows.Scan() // put columns here prefaced with &
-			table += "<tr><td></td></tr>" // <--- EDIT THIS LINE
+			table += "<tr><td>" + album_title + "</td></tr>" // <--- EDIT THIS LINE
 		}
 		// finally, close out the body and table
 		table += "</tbody></table>"
