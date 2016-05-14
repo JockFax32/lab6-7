@@ -77,7 +77,7 @@ func main() {
 		// once you've added all the columns in, close the header
 		table += "</thead><tbody>"
 		// declare all your RETURNED columns here
-		var avg int      // <--- EDIT THESE LINES
+		var avg NUMERIC(5,2)      // <--- EDIT THESE LINES
 		var genre string //<--- ^^^^
 		for rows.Next() {
 			// assign each of them, in order, to the parameters of rows.Scan.
