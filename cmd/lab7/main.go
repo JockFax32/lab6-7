@@ -32,7 +32,7 @@ func main() {
 	var errd error
 	// here we want to open a connection to the database using an environemnt variable.
 	// This isn't the best technique, but it is the simplest one for heroku
-	db, errd = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	db, errd = sql.Open("postgres", os.Getenv("postgres://ynerddqrushrdl:bIA_gQYkA5Lh-cM_Nv1bLdXrWU@ec2-54-197-230-161.compute-1.amazonaws.com:5432/dekv2rkkmd36hj"))
 	if errd != nil {
 		log.Fatalf("Error opening database: %q", errd)
 	}
