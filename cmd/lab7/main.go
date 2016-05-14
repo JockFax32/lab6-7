@@ -77,14 +77,14 @@ func main() {
 		// once you've added all the columns in, close the header
 		table += "</thead><tbody>"
 		// declare all your RETURNED columns here
-		var avg NUMERIC(5,2)      // <--- EDIT THESE LINES
+		var avg float64      // <--- EDIT THESE LINES
 		var genre string //<--- ^^^^
 		for rows.Next() {
 			// assign each of them, in order, to the parameters of rows.Scan.
 			// preface each variable with &
 			rows.Scan(&avg, &genre) // <--- EDIT THIS LINE
 			// can't combine ints and strings in Go. Use strconv.Itoa(int) instead
-			table += "<tr><td>" + strconv.Itoa(avg) + "</td><td>" + genre + "</td></tr>" // <--- EDIT THIS LINE
+			table += "<tr><td>" + strconv.FormatFloat(avg, 'E', 2, 64) + "</td><td>" + genre + "</td></tr>" // <--- EDIT THIS LINE
 		}
 		// finally, close out the body and table
 		table += "</tbody></table>"
