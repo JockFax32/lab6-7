@@ -58,7 +58,11 @@ func main() {
 	router.GET("/query1", func(c *gin.Context) {
 		table := "<table class='table'><thead><tr>"
 		// put your query here
-		rows, err := db.Query("SELECT * FROM table1") // <--- EDIT THIS LINE
+		rows, err := db.Query("SELECT CAST(AVG(cost) AS NUMERIC(5,2)) AS Avg_Cost, genre
+								FROM album
+								GROUP BY genre
+								ORDER BY Avg_Cost DESC;
+								") // <--- EDIT THIS LINE
 		if err != nil {
 			// careful about returning errors to the user!
 			c.AbortWithError(http.StatusInternalServerError, err)
@@ -70,18 +74,18 @@ func main() {
 		}
 		for _, value := range cols {
 			table += "<th class='text-center'>" + value + "</th>"
-		}
+		} 
 		// once you've added all the columns in, close the header
 		table += "</thead><tbody>"
 		// declare all your RETURNED columns here
-		var id int      // <--- EDIT THESE LINES
-		var name string //<--- ^^^^
+		var avg double      // <--- EDIT THESE LINES
+		var genre string //<--- ^^^^
 		for rows.Next() {
 			// assign each of them, in order, to the parameters of rows.Scan.
 			// preface each variable with &
-			rows.Scan(&id, &name) // <--- EDIT THIS LINE
+			rows.Scan(&avg, &genre) // <--- EDIT THIS LINE
 			// can't combine ints and strings in Go. Use strconv.Itoa(int) instead
-			table += "<tr><td>" + strconv.Itoa(id) + "</td><td>" + name + "</td></tr>" // <--- EDIT THIS LINE
+			table += "<tr><td>" + strconv.Itoa(avg) + "</td><td>" + genre + "</td></tr>" // <--- EDIT THIS LINE
 		}
 		// finally, close out the body and table
 		table += "</tbody></table>"
