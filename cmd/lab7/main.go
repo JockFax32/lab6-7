@@ -130,7 +130,7 @@ func main() {
 		table := "<table class='table'><thead><tr>"
 		// put your query here
 		rows, err := db.Query("SELECT firstname" +
-								" FROM person" //+
+								" FROM person") //+
 								//" WHERE cost > (SELECT avg(age) FROM artist);") // <--- EDIT THIS LINE
 		if err != nil {
 			// careful about returning errors to the user!
@@ -147,10 +147,10 @@ func main() {
 		// once you've added all the columns in, close the header
 		table += "</thead><tbody>"
 		// columns
-		var name string
+		var album_title string
 		for rows.Next() {
 			// rows.Scan() // put columns here prefaced with &
-			table += "<tr><td>" + name + "</td></tr>" // <--- EDIT THIS LINE
+			table += "<tr><td>" + album_title + "</td></tr>" // <--- EDIT THIS LINE
 		}
 		// finally, close out the body and table
 		table += "</tbody></table>"
