@@ -118,7 +118,7 @@ func main() {
 		var album_cost float64
 		var track_count int
 		for rows.Next() {
-			// rows.Scan() // put columns here prefaced with &
+		rows.Scan(&album_title, &album_cost, &track_count) // put columns here prefaced with &
 			table += "<tr><td>" + album_title + "</td><td>" + strconv.FormatFloat(album_cost, 'E', 2, 64) +"</td><td>" + strconv.Itoa(track_count) + "</td></tr>" // <--- EDIT THIS LINE
 		}
 		// finally, close out the body and table
@@ -147,10 +147,10 @@ func main() {
 		// once you've added all the columns in, close the header
 		table += "</thead><tbody>"
 		// columns
-		var album_title string
+		var personName string
 		for rows.Next() {
-			// rows.Scan() // put columns here prefaced with &
-			table += "<tr><td>" + album_title + "</td></tr>" // <--- EDIT THIS LINE
+			rows.Scan(&personName) // put columns here prefaced with &
+			table += "<tr><td>" + personName + "</td></tr>" // <--- EDIT THIS LINE
 		}
 		// finally, close out the body and table
 		table += "</tbody></table>"
