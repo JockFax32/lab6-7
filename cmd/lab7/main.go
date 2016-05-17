@@ -130,7 +130,7 @@ func main() {
 		table := "<table class='table'><thead><tr>"
 		// put your query here
 		rows, err := db.Query("SELECT title" +
-								" FROM album") //+
+								" FROM album" +
 								" WHERE cost > (SELECT avg(age) FROM artist);") // <--- EDIT THIS LINE
 		if err != nil {
 			// careful about returning errors to the user!
