@@ -129,9 +129,9 @@ func main() {
 	router.GET("/query3", func(c *gin.Context) {
 		table := "<table class='table'><thead><tr>"
 		// put your query here
-		rows, err := db.Query("SELECT firstname" +
-								" FROM person") //+
-								//" WHERE cost > (SELECT avg(age) FROM artist);") // <--- EDIT THIS LINE
+		rows, err := db.Query("SELECT title" +
+								" FROM album") //+
+								" WHERE cost > (SELECT avg(age) FROM artist);") // <--- EDIT THIS LINE
 		if err != nil {
 			// careful about returning errors to the user!
 			c.AbortWithError(http.StatusInternalServerError, err)
@@ -147,10 +147,10 @@ func main() {
 		// once you've added all the columns in, close the header
 		table += "</thead><tbody>"
 		// columns
-		var personName string
+		var titlename string
 		for rows.Next() {
-			rows.Scan(&personName) // put columns here prefaced with &
-			table += "<tr><td>" + personName + "</td></tr>" // <--- EDIT THIS LINE
+			rows.Scan(&titlename) // put columns here prefaced with &
+			table += "<tr><td>" + titlename + "</td></tr>" // <--- EDIT THIS LINE
 		}
 		// finally, close out the body and table
 		table += "</tbody></table>"
